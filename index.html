@@ -82,14 +82,14 @@
 <!-- 1. summary -->
 <section class="slide">
   <div class="tracker">요약</div>
-  <h1 class="title">성장은 객단가가 끌어왔고, 이익률은 인건비에 눌려 있으며, 매장 간 격차가 벌어지기 시작했다</h1>
+  <h1 class="title">성장은 객단가가 끌어왔고, 이익률은 인건비에 눌려 있으며, 매장 간 이익률 차이는 임차료가 만든다</h1>
   <div class="rule"></div>
   <div>
     <div class="sumrow"><div class="num">1</div><div><div class="t">매출 +17%(2022→2025)는 전부 객단가 덕분이고, 주문 건수는 −1.2%다</div><div class="d">주문 37.0만 건(2022) → 36.6만 건(2025). 신규고객수와 재방문율(53%)도 4년째 정체.</div></div></div>
     <div class="sumrow"><div class="num">2</div><div><div class="t">이익률은 17~18%에 갇혀 있고, 원인은 인건비율 상승(27.1% → 29.0%)이다</div><div class="d">식자재비율(31%)과 플랫폼수수료율(7%)은 평탄. 사건로그의 치즈 단가 인상 영향은 데이터에서 확인되지 않는다.</div></div></div>
     <div class="sumrow"><div class="num">3</div><div><div class="t">자사앱이 주문의 31%까지 커졌지만 외부 배달앱 주문은 그대로이고, 쿠폰 비용이 플랫폼 수수료보다 크다</div><div class="d">외부앱 주문 연 약 16만 건 유지. 2025년 쿠폰 9.6억 원 vs 플랫폼 수수료 7.7억 원.</div></div></div>
-    <div class="sumrow"><div class="num">4</div><div><div class="t">2026년 매장 간 이익률 격차가 2.6%p에서 7.8%p로 벌어졌다</div><div class="d">서면(21.0%)·부평(20.5%)은 오르고, 충장로(13.2%)·연동(14.2%)은 내렸다. 원인은 점주 교체와 정규직 이탈로 확인.</div></div></div>
-    <div class="sumrow"><div class="num">5</div><div><div class="t">위생 B등급이 전체 매장·월의 절반이고, 이익과 무관해 방치되기 쉽다</div><div class="d">연동 75%, 충장로 68% vs 강남 20%. 정규직 인원이 많을수록 QSC는 오르지만(상관 +0.35) 이익률은 소폭 낮아진다.</div></div></div>
+    <div class="sumrow"><div class="num">4</div><div><div class="t">큰 매장일수록 이익률이 낮은 이유는 운영이 아니라 임차료다</div><div class="d">대형 3곳 − 소형 3곳 이익률 차 −2.25%p 중 임차료율이 +2.21%p. 규모 점수와 이익률 r=−0.94(순열검정 p=0.0003).</div></div></div>
+    <div class="sumrow"><div class="num">5</div><div><div class="t">위생 B등급이 전체 매장·월의 절반이고, 이익과 무관해 방치되기 쉽다</div><div class="d">연동 75%, 충장로 68% vs 강남 20%. 매장 간 차이는 확실하지만 월 단위 연속성은 없다(자기상관 0.03).</div></div></div>
   </div>
   <div class="footer"><span>출처: 피자 매장별 실적 데이터.xlsx (매장·월 단위로 중복 제거 후 집계)</span><span>2</span></div>
 </section>
@@ -143,8 +143,8 @@
       </div>
       <div class="box"><h3>사건로그 가설 검증</h3>
         <ul>
-          <li><span class="tag no">확인 안 됨</span>치즈 단가 +6%(EV-026, 미확인): 식자재비율 2025년 1~8월 31.1% → 2026년 30.9%, 변화 없음</li>
-          <li><span class="tag ok">확인</span>배민 수수료 인상(EV-024): 수수료율은 7.0%로 그대로, 앱 주문 1건당 수수료는 4,493원 → 4,872원(<b>+8%</b>)</li>
+          <li><span class="tag no">데이터 불일치</span>치즈 단가 +6%(EV-026, 미확인): 안정 구간(6~8월) 식자재비율 −0.11%p [−0.40, +0.19]. 가정(치즈=식자재비 25%) 시 기대 +0.47%p는 구간 밖</li>
+          <li><span class="tag est">부분 확인</span>배민 수수료 인상(EV-024): 수수료율은 변화 없음(0.00%p), 앱 주문 1건당 수수료만 4,602원 → 4,876원(<b>+6%</b>)</li>
         </ul>
       </div>
       <div class="box"><h3>그래서</h3><p>원가·수수료가 아니라 <b>인력 운영 효율</b>이 이익률의 핵심 변수다. 매장별 인건비율 관리가 먼저다.</p></div>
@@ -186,31 +186,32 @@
 
 <!-- 5. insight 4 -->
 <section class="slide">
-  <div class="tracker">시사점 4 / 5 · 매장 격차</div>
-  <h1 class="title">2026년 매장 간 이익률 격차가 2.6%p에서 7.8%p로 벌어졌다 — 갈린 원인은 사람이다</h1>
+  <div class="tracker">시사점 4 / 5 · 매장 간 차이</div>
+  <h1 class="title">큰 매장일수록 이익률이 낮은 이유는 운영이 아니라 임차료다</h1>
   <div class="rule"></div>
   <div class="body">
     <div class="chartcol">
-      <div class="chart-title">매장별 영업이익률(%): 2025년 1~8월 → 2026년 1~8월</div>
-      <div class="chart-sub">같은 기간끼리 비교해 계절 영향을 뺐다</div>
+      <div class="chart-title">매장별 임차료율과 영업이익률(%) — 2020~2025 및 2026-06~08 평균</div>
+      <div class="chart-sub">점 옆 숫자는 월 평균 매출(억 원). 선은 최소제곱 직선(기울기 −0.96)</div>
       <div id="c4"></div>
     </div>
     <div class="side">
-      <div class="box"><h3>내려간 두 매장 <span class="tag ok">원인 확인</span></h3>
+      <div class="box"><h3>무슨 일이 있었나 <span class="tag ok">통계 확인</span></h3>
         <ul>
-          <li><b>충장로</b> 15.5 → 13.2%: 점주 승계(EV-029), 식자재비율 33.7 → 37.1%, 인건비율 29.8 → 32.1%, QSC 평균 82</li>
-          <li><b>연동</b> 15.8 → 14.2%: 정규직 이탈(EV-025·035), 4월 이익률 3.7%</li>
+          <li>규모·품질 축(면적·좌석·주문·인원·QSC·위생·리뷰, 분산 94.6%)과 이익률 <b>r=−0.94</b> (순열검정 p=0.0003)</li>
+          <li>대형 3곳(강남·홍대·서면) − 소형 3곳(둔산·충장로·연동) 이익률 차 <b>−2.25%p</b> 중 임차료율 <b>+2.21%p</b></li>
+          <li>인건비·식자재·수수료율 차이는 ±0.2%p 이내</li>
         </ul>
       </div>
-      <div class="box"><h3>올라간 매장</h3>
-        <p><b>서면</b> 16.9 → 21.0%(리뉴얼 EV-022, <span class="tag ok">확인</span>), <b>부평</b> 18.1 → 20.5%(원인은 사건로그에 없음, <span class="tag est">추정</span>).</p>
-      </div>
       <div class="box"><h3>그래서</h3>
-        <p>매출 규모는 답이 아니다. 월 매출 1위 강남(1.30억)과 홍대(1.26억)는 장기 이익률이 15.5~15.6%로 하위권이고, 매출과 이익률의 상관은 <b>0.02</b>다.</p>
+        <p>큰 매장은 QSC·위생도 오히려 우수하다. 이익률 격차는 <b>상권 비용(임차료)</b>이 만든 것이라, 운영 개선 대상이 아니라 <b>수익 구조</b>(객단가·임차 조건) 문제다.</p>
+      </div>
+      <div class="box" style="border-color:#C58A00;background:#FFF4E5"><h3 style="color:#9A6A00">정정</h3>
+        <p>이전 버전의 "2026년 매장 간 격차 2.6 → 7.8%p 확대, 서면·부평 상승"은 <b>노이즈</b>로 확인됐다. 2026년 1~5월(월 평균 환산 구간)은 변동성이 평소의 약 2.4배였고, 매장 평균 SD 2.42는 우연 기대치 2.35와 구분되지 않는다(p=0.44).</p>
       </div>
     </div>
   </div>
-  <div class="footer"><span>출처: 매출데이터(실적), 사건로그, 매장마스터. 2026년 1~5월은 월 평균 환산치</span><span>6</span></div>
+  <div class="footer"><span>출처: 매출데이터(실적), 안정 구간만 사용. 상세 검정은 '온톨로지·지식그래프 원인 분석' 문서. N=9 매장</span><span>6</span></div>
 </section>
 
 <!-- 6. insight 5 -->
@@ -227,15 +228,15 @@
     <div class="side">
       <div class="box"><h3>무슨 일이 있었나</h3>
         <ul>
-          <li>연동 <b>75%</b>, 충장로 <b>68%</b>는 B등급이 상시화. 가장 낮은 강남도 20%</li>
-          <li>QSC 85점 미만 달(2025~26): 충장로 10/20, 동성로 7/20</li>
-          <li>QSC·위생과 이익률의 상관은 <b>−0.07</b>, 즉 손익 지표에 안 잡힌다</li>
+          <li>연동 <b>75%</b>, 충장로 <b>68%</b>가 B등급 최다, 가장 낮은 강남도 20%. 매장 간 차이는 통계적으로 확실(χ²=84, p&lt;1e-14)</li>
+          <li>그러나 한 매장 안에서 월별 <b>연속성은 없다</b>(자기상관 0.03): 매달 독립적으로 발생하고 확률만 매장마다 다르다</li>
+          <li>QSC·위생과 이익률의 월 단위 상관은 <b>−0.05</b>, 즉 손익 지표에 안 잡힌다</li>
         </ul>
       </div>
-      <div class="box"><h3>정규직의 양면</h3>
-        <p>정규직 수와 QSC는 <b>+0.35</b>로 연결되지만, 이익률과는 −0.14다. 2026년 정규직 전환 지원금(EV-030)으로 정규직이 3.5 → 3.7명으로 늘어난 만큼 <b>품질–비용 균형</b>을 같이 봐야 한다.</p>
+      <div class="box"><h3>규모·품질 축</h3>
+        <p>작은 매장일수록 QSC·위생이 낮다(적재 0.99~1.00). 정규직·QSC의 +0.35는 <b>매장 간 규모 차이</b>에서 나온 상관이고, 한 매장의 월별 변동에서는 <b>−0.01</b>(p=0.87)로 관계가 없다.</p>
       </div>
-      <div class="box"><h3>그래서</h3><p>위생·QSC를 점주 평가에 직접 넣지 않으면 개선 동기가 없다. 이익이 내려간 충장로·연동이 위생 최하위인 점도 우연으로 보기 어렵다.</p></div>
+      <div class="box"><h3>그래서</h3><p>위생·QSC는 이익으로 보상되지 않아 놓치기 쉽다. 대응은 월 연속 기록이 아니라 <b>B등급 비중이 높은 매장(연동·충장로)의 점검 체계</b> 개선이다.</p></div>
     </div>
   </div>
   <div class="footer"><span>출처: 매출데이터(실적), 사건로그(EV-011·014·017), 데이터사전. 위생검사 결과는 A/B 두 등급만 존재</span><span>7</span></div>
@@ -244,15 +245,15 @@
 <!-- 7. actions -->
 <section class="slide">
   <div class="tracker">제안</div>
-  <h1 class="title">다음 분기에는 주문 건수, 인건비율, 쿠폰 효율, 취약 두 매장, 위생 지표를 관리 대상으로 올린다</h1>
+  <h1 class="title">다음 분기에는 주문 건수, 인건비율, 쿠폰 효율, 임차료 부담 매장, 위생 지표를 관리 대상으로 올린다</h1>
   <div class="rule"></div>
   <table>
     <tr><th style="width:26%">시사점</th><th style="width:44%">제안 액션</th><th>확인할 지표</th></tr>
     <tr><td><b>1</b> 주문 정체</td><td>성장 목표를 매출에서 <b>주문 건수·신규고객수</b>로 전환. 재방문율 53% 정체 구간을 겨냥한 프로그램 설계</td><td>월 주문수, 신규고객수, 재방문율</td></tr>
     <tr><td><b>2</b> 인건비율</td><td>매장별 인건비율 상한 설정, 정규직 전환 지원금(EV-030)의 비용·QSC 효과 분기 점검. 치즈 단가는 2026-09 이후 계속 추적</td><td>인건비율, 식자재비율</td></tr>
     <tr><td><b>3</b> 쿠폰·채널</td><td>쿠폰 대비 재방문·객단가 효과 측정 후 쿠폰 구조 재설계. 자사앱 비중 대신 <b>외부앱 주문의 자사앱 전환</b>을 목표로</td><td>쿠폰/매출, 외부앱 주문수</td></tr>
-    <tr><td><b>4</b> 매장 격차</td><td>충장로·연동 개선 계획을 SV와 수립. 서면(리뉴얼)·부평의 운영 방식을 확인해 이식 가능성 검토</td><td>두 매장 이익률, 정규직 수, QSC</td></tr>
-    <tr><td><b>5</b> 위생 B등급</td><td>B등급 연속 개월 수를 SV·점주 평가에 포함, 연동·충장로 우선 점검</td><td>B등급 비중, QSC 85점 미만 월 수</td></tr>
+    <tr><td><b>4</b> 매장 간 이익률 차이</td><td>대형 매장(강남·홍대·서면)은 운영 개선보다 <b>임차 조건·객단가·메뉴 믹스</b>로 수익 구조 점검. 점주 승계 후 QSC·이익률이 가장 낮은 충장로는 SV 집중 지원(부분 지지)</td><td>임차료율, 객단가, 충장로 QSC</td></tr>
+    <tr><td><b>5</b> 위생 B등급</td><td>B등급 <b>비중</b>이 높은 연동·충장로의 점검 체크리스트와 SV 방문 주기 개선. 월 연속 기록은 근거가 없어 관리 지표에서 제외</td><td>매장별 B등급 비중, QSC 85점 미만 월 수</td></tr>
   </table>
   <p style="margin-top:14px;font-size:13px;color:var(--mute)">위 액션은 데이터에서 도출한 제안이며, 실행 비용과 효과는 별도 검증이 필요하다.</p>
   <div class="footer"><span>출처: 위 분석 종합</span><span>8</span></div>
@@ -378,20 +379,20 @@ const poly=(pts,c,w=2.5)=>`<polyline points="${pts.map(p=>p.join(',')).join(' ')
   $('c3c').innerHTML=wrap(740,192,s);
 })();
 
-// 4. dumbbell
+// 4. rent share vs margin scatter
 (()=>{
-  const d=[['부산 서면점',16.9,21.0],['인천 부평점',18.1,20.5],['대전 둔산점',17.2,18.1],['대구 동성로점',15.5,17.8],['서울 홍대점',15.7,17.4],['수원 영통점',17.0,17.2],['서울 강남점',15.7,16.4],['제주 연동점',15.8,14.2],['광주 충장로점',15.5,13.2]];
-  const x0=190, w=430, lo=11, hi=22, rh=38; let s='';
-  [12,14,16,18,20,22].forEach(g=>{const x=x0+(g-lo)/(hi-lo)*w; s+=L(x,6,x,d.length*rh+6,'#EBEBEB')+T(x,d.length*rh+26,g+'%',{anchor:'middle',size:12,fill:GR});});
-  d.forEach((r,i)=>{
-    const y=i*rh+rh/2+6, a=x0+(r[1]-lo)/(hi-lo)*w, b=x0+(r[2]-lo)/(hi-lo)*w, up=r[2]>=r[1], col=up?P:DOWN;
-    s+=T(20,y+5,r[0],{size:14,weight:(i===0||i>=7)?800:500});
-    s+=L(a,y,b,y,col,4)+C(a,y,7,'#fff',GR)+C(b,y,8,col);
-    const dif=(r[2]-r[1]); s+=T(b+(up?16:-16),y+5,r[2].toFixed(1),{anchor:up?'start':'end',size:13.5,weight:800,fill:col});
-    s+=T(715,y+5,(dif>=0?'+':'')+dif.toFixed(1)+'%p',{anchor:'end',size:12.5,weight:700,fill:col});
-  });
-  s+=C(30,d.length*rh+52,6,'#fff',GR)+T(42,d.length*rh+57,'2025년 1~8월',{size:12.5,fill:'#555'})+C(160,d.length*rh+52,6,P)+T(172,d.length*rh+57,'2026년 1~8월(상승)',{size:12.5,fill:'#555'})+C(320,d.length*rh+52,6,DOWN)+T(332,d.length*rh+57,'2026년 1~8월(하락)',{size:12.5,fill:'#555'});
-  $('c4').innerHTML=wrap(740,d.length*rh+70,s);
+  const d=[['강남',6.3,15.1,1.11],['홍대',6.1,15.2,1.07],['영통',3.7,17.3,0.89],['부평',3.9,17.6,0.81],['둔산',3.5,18.3,0.78],['동성로',4.0,16.8,0.86],['서면',4.4,16.7,0.94],['충장로',3.4,17.6,0.72],['연동',3.3,17.9,0.68]];
+  const x0=70,x1=690,y0=20,y1=350,xl=2.3,xh=6.8,yl=14.5,yh=19; const X=v=>x0+(v-xl)/(xh-xl)*(x1-x0), Y=v=>y1-(v-yl)/(yh-yl)*(y1-y0); let s='';
+  [15,16,17,18,19].forEach(g=>{s+=L(x0,Y(g),x1,Y(g),'#EEE')+T(x0-8,Y(g)+4,g+'%',{anchor:'end',size:12,fill:GR});});
+  [3,4,5,6].forEach(g=>{s+=L(X(g),y0,X(g),y1,'#F2F2F2')+T(X(g),y1+20,g+'%',{anchor:'middle',size:12,fill:GR});});
+  const n=d.length, mx=d.reduce((a,r)=>a+r[1],0)/n, my=d.reduce((a,r)=>a+r[2],0)/n; let sxy=0,sxx=0; d.forEach(r=>{sxy+=(r[1]-mx)*(r[2]-my);sxx+=(r[1]-mx)**2;}); const b=sxy/sxx, a=my-b*mx;
+  s+=L(X(2.8),Y(a+b*2.8),X(6.6),Y(a+b*6.6),P,2,'6 4');
+  const OFF={'강남':[13,5,'start'],'홍대':[-13,-8,'end'],'영통':[10,16,'start'],'부평':[10,-6,'start'],'둔산':[10,-8,'start'],'동성로':[-10,16,'end'],'서면':[10,16,'start'],'충장로':[-10,-6,'end'],'연동':[-10,-4,'end']};
+  d.forEach(r=>{const big=r[0]==='강남'||r[0]==='홍대', o=OFF[r[0]];s+=C(X(r[1]),Y(r[2]),big?9:7,big?P:'#8A8A8A')+T(X(r[1])+o[0],Y(r[2])+o[1],`${r[0]} (${r[3].toFixed(2)})`,{anchor:o[2],size:13,weight:big?800:500,fill:big?P:INK});});
+  s+=T((x0+x1)/2,y1+44,'임차료율(매출 대비, %)',{anchor:'middle',size:13,fill:'#555'});
+  s+=`<text transform="translate(18 ${(y0+y1)/2}) rotate(-90)" font-size="13" fill="#555" text-anchor="middle">영업이익률(%)</text>`;
+  s+=T(x1,y0+8,'r = −0.97',{anchor:'end',size:15,weight:800,fill:P});
+  $('c4').innerHTML=wrap(740,400,s);
 })();
 
 // 5. hygiene B share bars
