@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>피자 매장 실적 시사점 5가지</title>
+<style>
+  :root{
+    --purple:#7823DC; --purple-soft:#EFE6FB; --ink:#1E1E1E; --ink2:#4A4A4A; --mute:#8A8A8A;
+    --line:#D9D9D9; --bg:#FFFFFF; --panel:#F5F5F5; --down:#D9502B; --ok:#2E7D5B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#2A2A2A;font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;color:var(--ink)}
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{position:absolute;left:50%;top:calc(50% - 22px);width:1280px;height:720px;transform-origin:center center;flex:none}
+  .slide{position:absolute;inset:0;background:var(--bg);display:none;padding:44px 56px 0;overflow:hidden}
+  .slide.active{display:block}
+  .tracker{font-size:13px;letter-spacing:.04em;color:var(--purple);font-weight:700;margin-bottom:10px}
+  h1.title{font-size:27px;line-height:1.32;font-weight:800;letter-spacing:-.01em;max-width:1160px;min-height:71px}
+  .rule{height:3px;width:64px;background:var(--purple);margin:10px 0 14px}
+  .body{display:flex;gap:32px;height:500px}
+  .chartcol{width:740px;flex:none}
+  .side{flex:1;display:flex;flex-direction:column;gap:10px}
+  .box{background:var(--panel);padding:12px 16px;border-left:4px solid var(--purple)}
+  .box h3{font-size:13.5px;font-weight:800;color:var(--purple);margin-bottom:6px;letter-spacing:.02em}
+  .box p,.box li{font-size:14px;line-height:1.5;color:var(--ink2)}
+  .box ul{padding-left:18px}
+  .box li{margin-bottom:4px}
+  .box b{color:var(--ink)}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:2px;margin-right:4px;vertical-align:1px}
+  .tag.ok{background:#E2F2EA;color:var(--ok)} .tag.est{background:#FFF1D6;color:#9A6A00} .tag.no{background:#EBEBEB;color:#555}
+  .footer{position:absolute;left:56px;right:56px;bottom:18px;display:flex;justify-content:space-between;font-size:11.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:8px}
+  .chart-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .chart-sub{font-size:12px;color:var(--mute);margin-bottom:6px}
+  svg text{font-family:inherit}
+  /* title slide */
+  .cover{padding:0;background:#fff}
+  .cover .band{position:absolute;left:0;top:0;bottom:0;width:22px;background:var(--purple)}
+  .cover .in{position:absolute;left:96px;top:210px;right:96px}
+  .cover h1{font-size:50px;line-height:1.25;font-weight:800;letter-spacing:-.02em}
+  .cover .sub{margin-top:26px;font-size:20px;color:var(--ink2);line-height:1.6}
+  .cover .meta{position:absolute;left:96px;bottom:56px;font-size:14px;color:var(--mute)}
+  /* summary */
+  .sumrow{display:flex;gap:18px;align-items:flex-start;padding:19px 0;border-bottom:1px solid var(--line)}
+  .sumrow:last-child{border-bottom:none}
+  .num{flex:none;width:38px;height:38px;border-radius:50%;background:var(--purple);color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .sumrow .t{font-size:19px;font-weight:800;line-height:1.35}
+  .sumrow .d{font-size:14.5px;color:var(--ink2);margin-top:3px;line-height:1.5}
+  /* table */
+  table{border-collapse:collapse;width:100%;font-size:14.5px}
+  th{background:var(--purple);color:#fff;text-align:left;padding:10px 12px;font-weight:700;font-size:13.5px}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5;color:var(--ink2)}
+  td b{color:var(--ink)}
+  /* nav */
+  #nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;color:#bbb;font-size:13px;z-index:5;white-space:nowrap}
+  #nav button{background:#444;color:#eee;border:0;padding:6px 14px;border-radius:3px;cursor:pointer;font-family:inherit}
+  #nav button:hover{background:var(--purple)}
+  @media print{
+    @page{size:1280px 720px;margin:0}
+    html,body{background:#fff;height:auto}
+    #viewport{position:static;display:block}
+    #stage{transform:none!important;position:static;width:1280px;height:auto}
+    .slide{display:block!important;position:relative;height:720px;page-break-after:always;break-after:page}
+    #nav{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="viewport">
+<div id="stage">
+
+<!-- 0. cover -->
+<section class="slide cover">
+  <div class="band"></div>
+  <div class="in">
+    <h1>피자 프랜차이즈 9개 매장 실적 분석<br>경영진을 위한 시사점 5가지</h1>
+    <p class="sub">2020년 1월 ~ 2026년 8월 월별 실적(가상 데이터) 기준<br>매출은 늘었지만, 주문과 이익은 제자리에 있다</p>
+  </div>
+  <div class="meta">분석 대상: 매출데이터 738개 매장·월 · 사건로그 39건과 대조 · 작성일 2026-10-30</div>
+</section>
+
+<!-- 1. summary -->
+<section class="slide">
+  <div class="tracker">요약</div>
+  <h1 class="title">성장은 객단가가 끌어왔고, 이익률은 인건비에 눌려 있으며, 매장 간 격차가 벌어지기 시작했다</h1>
+  <div class="rule"></div>
+  <div>
+    <div class="sumrow"><div class="num">1</div><div><div class="t">매출 +17%(2022→2025)는 전부 객단가 덕분이고, 주문 건수는 −1.2%다</div><div class="d">주문 37.0만 건(2022) → 36.6만 건(2025). 신규고객수와 재방문율(53%)도 4년째 정체.</div></div></div>
+    <div class="sumrow"><div class="num">2</div><div><div class="t">이익률은 17~18%에 갇혀 있고, 원인은 인건비율 상승(27.1% → 29.0%)이다</div><div class="d">식자재비율(31%)과 플랫폼수수료율(7%)은 평탄. 사건로그의 치즈 단가 인상 영향은 데이터에서 확인되지 않는다.</div></div></div>
+    <div class="sumrow"><div class="num">3</div><div><div class="t">자사앱이 주문의 31%까지 커졌지만 외부 배달앱 주문은 그대로이고, 쿠폰 비용이 플랫폼 수수료보다 크다</div><div class="d">외부앱 주문 연 약 16만 건 유지. 2025년 쿠폰 9.6억 원 vs 플랫폼 수수료 7.7억 원.</div></div></div>
+    <div class="sumrow"><div class="num">4</div><div><div class="t">2026년 매장 간 이익률 격차가 2.6%p에서 7.8%p로 벌어졌다</div><div class="d">서면(21.0%)·부평(20.5%)은 오르고, 충장로(13.2%)·연동(14.2%)은 내렸다. 원인은 점주 교체와 정규직 이탈로 확인.</div></div></div>
+    <div class="sumrow"><div class="num">5</div><div><div class="t">위생 B등급이 전체 매장·월의 절반이고, 이익과 무관해 방치되기 쉽다</div><div class="d">연동 75%, 충장로 68% vs 강남 20%. 정규직 인원이 많을수록 QSC는 오르지만(상관 +0.35) 이익률은 소폭 낮아진다.</div></div></div>
+  </div>
+  <div class="footer"><span>출처: 피자 매장별 실적 데이터.xlsx (매장·월 단위로 중복 제거 후 집계)</span><span>2</span></div>
+</section>
+
+<!-- 2. insight 1 -->
+<section class="slide">
+  <div class="tracker">시사점 1 / 5 · 성장의 질</div>
+  <h1 class="title">매출 성장은 객단가가 만들었고, 주문 건수는 2022년 이후 제자리다</h1>
+  <div class="rule"></div>
+  <div class="body">
+    <div class="chartcol">
+      <div class="chart-title">연도별 총 주문 건수(천 건)와 객단가(만 원)</div>
+      <div class="chart-sub">객단가 = 매출합 ÷ 총주문건수</div>
+      <div id="c1"></div>
+    </div>
+    <div class="side">
+      <div class="box"><h3>무슨 일이 있었나</h3>
+        <ul>
+          <li>연 매출: 70.1억(2020) → 93.5억(2022) → <b>109.5억(2025)</b></li>
+          <li>2022→2025: 매출 <b>+17.1%</b> = 객단가 <b>+18.6%</b> × 주문 <b>−1.2%</b></li>
+          <li>신규고객수는 월 평균 398명(2022) → 383명(2025), 재방문율은 53%로 고정</li>
+        </ul>
+      </div>
+      <div class="box"><h3>그래서</h3>
+        <p>가격·구성 효과가 이미 한 번 반영됐다. 2026년 1~8월은 전년 동기 대비 <b>매출 +5.9%, 주문 +2.4%</b>로, 객단가 상승 여력은 줄어드는 신호다. 다음 성장은 <b>주문 건수와 신규 유입</b>에서 나와야 한다.</p>
+      </div>
+      <div class="box"><h3>근거 수준</h3><p><span class="tag ok">데이터 확인</span>주문·객단가·매출은 정의대로 재계산된 값이다. 객단가가 오른 이유(가격 인상, 세트 구성)는 데이터만으로는 구분할 수 없다.</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>출처: 매출데이터(실적 구분). 2026년은 1~8월만 있어 연도 비교에서 제외</span><span>3</span></div>
+</section>
+
+<!-- 3. insight 2 -->
+<section class="slide">
+  <div class="tracker">시사점 2 / 5 · 수익성</div>
+  <h1 class="title">이익률은 17~18%에 묶여 있다 — 인건비가 매출보다 빨리 올랐기 때문이다</h1>
+  <div class="rule"></div>
+  <div class="body">
+    <div class="chartcol">
+      <div class="chart-title">매출 대비 비용 비율과 영업이익률(%)</div>
+      <div class="chart-sub">매출합 대비 비율, 전 매장 합계. 2026*은 1~8월</div>
+      <div id="c2"></div>
+    </div>
+    <div class="side">
+      <div class="box"><h3>무슨 일이 있었나</h3>
+        <ul>
+          <li>매장당 월 인건비 2,347만 → 3,007만 원(<b>+28%</b>), 월 매출은 +20%</li>
+          <li>인원은 거의 그대로(정규직 3.4명, 파트타임 6.5명) → <b>1인당 비용 상승</b></li>
+          <li>임차료율 4.3% → 3.8%가 인건비 부담 일부를 상쇄</li>
+        </ul>
+      </div>
+      <div class="box"><h3>사건로그 가설 검증</h3>
+        <ul>
+          <li><span class="tag no">확인 안 됨</span>치즈 단가 +6%(EV-026, 미확인): 식자재비율 2025년 1~8월 31.1% → 2026년 30.9%, 변화 없음</li>
+          <li><span class="tag ok">확인</span>배민 수수료 인상(EV-024): 수수료율은 7.0%로 그대로, 앱 주문 1건당 수수료는 4,493원 → 4,872원(<b>+8%</b>)</li>
+        </ul>
+      </div>
+      <div class="box"><h3>그래서</h3><p>원가·수수료가 아니라 <b>인력 운영 효율</b>이 이익률의 핵심 변수다. 매장별 인건비율 관리가 먼저다.</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>출처: 매출데이터(실적), 사건로그, 공급사마스터. 영업이익은 쿠폰 등 기타 항목이 반영돼 비용 6항목 합과 정확히 맞지 않음</span><span>4</span></div>
+</section>
+
+<!-- 4. insight 3 -->
+<section class="slide">
+  <div class="tracker">시사점 3 / 5 · 채널</div>
+  <h1 class="title">자사앱이 주문의 31%까지 컸지만 외부 배달앱 의존은 그대로이고, 쿠폰이 수수료보다 크다</h1>
+  <div class="rule"></div>
+  <div class="body">
+    <div class="chartcol">
+      <div style="display:flex;gap:20px">
+        <div style="width:360px"><div class="chart-title">자사앱 주문 비중(%)</div><div id="c3a"></div></div>
+        <div style="width:360px"><div class="chart-title">외부 배달앱 3사 주문수(천 건)</div><div id="c3b"></div></div>
+      </div>
+      <div class="chart-title" style="margin-top:6px">쿠폰 할인 금액 vs 플랫폼 수수료(억 원/년)</div>
+      <div id="c3c"></div>
+    </div>
+    <div class="side">
+      <div class="box"><h3>무슨 일이 있었나</h3>
+        <ul>
+          <li>자사앱 비중 5.6%(2020) → 13.8%(2022) → <b>31.4%(2026*)</b></li>
+          <li>배민·쿠팡이츠·요기요 주문은 연 <b>약 16만 건</b>으로 고정, 배민 비중도 56%로 동일</li>
+          <li>쿠폰은 2021년부터 플랫폼 수수료를 추월, 2025년 <b>1.24배</b></li>
+        </ul>
+      </div>
+      <div class="box"><h3>그래서</h3>
+        <p>자사앱은 외부앱 주문을 대체하지 못하고 <b>홀·포장 주문에 얹혔다</b>. 앱 성장 자체를 성과로 보기보다, 쿠폰 대비 재방문·객단가 효과를 따로 봐야 한다.</p>
+      </div>
+      <div class="box"><h3>해석 주의</h3><p><span class="tag est">추정</span>쿠폰이 매출에서 이미 차감됐는지는 데이터 정의에 없다. 쿠폰 금액과 이익률의 상관도 +0.06으로 약하다.</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>출처: 매출데이터(실적), 플랫폼마스터. 2026*은 1~8월, 외부앱 주문수는 연 합계</span><span>5</span></div>
+</section>
+
+<!-- 5. insight 4 -->
+<section class="slide">
+  <div class="tracker">시사점 4 / 5 · 매장 격차</div>
+  <h1 class="title">2026년 매장 간 이익률 격차가 2.6%p에서 7.8%p로 벌어졌다 — 갈린 원인은 사람이다</h1>
+  <div class="rule"></div>
+  <div class="body">
+    <div class="chartcol">
+      <div class="chart-title">매장별 영업이익률(%): 2025년 1~8월 → 2026년 1~8월</div>
+      <div class="chart-sub">같은 기간끼리 비교해 계절 영향을 뺐다</div>
+      <div id="c4"></div>
+    </div>
+    <div class="side">
+      <div class="box"><h3>내려간 두 매장 <span class="tag ok">원인 확인</span></h3>
+        <ul>
+          <li><b>충장로</b> 15.5 → 13.2%: 점주 승계(EV-029), 식자재비율 33.7 → 37.1%, 인건비율 29.8 → 32.1%, QSC 평균 82</li>
+          <li><b>연동</b> 15.8 → 14.2%: 정규직 이탈(EV-025·035), 4월 이익률 3.7%</li>
+        </ul>
+      </div>
+      <div class="box"><h3>올라간 매장</h3>
+        <p><b>서면</b> 16.9 → 21.0%(리뉴얼 EV-022, <span class="tag ok">확인</span>), <b>부평</b> 18.1 → 20.5%(원인은 사건로그에 없음, <span class="tag est">추정</span>).</p>
+      </div>
+      <div class="box"><h3>그래서</h3>
+        <p>매출 규모는 답이 아니다. 월 매출 1위 강남(1.30억)과 홍대(1.26억)는 장기 이익률이 15.5~15.6%로 하위권이고, 매출과 이익률의 상관은 <b>0.02</b>다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>출처: 매출데이터(실적), 사건로그, 매장마스터. 2026년 1~5월은 월 평균 환산치</span><span>6</span></div>
+</section>
+
+<!-- 6. insight 5 -->
+<section class="slide">
+  <div class="tracker">시사점 5 / 5 · 운영 품질</div>
+  <h1 class="title">위생 B등급이 매장·월의 절반이고, 이익과 무관해서 놓치기 쉬운 리스크다</h1>
+  <div class="rule"></div>
+  <div class="body">
+    <div class="chartcol">
+      <div class="chart-title">위생검사 B등급 비중(%) — 2020-01~2026-08, 매장당 80개월</div>
+      <div class="chart-sub">전체 평균 50.4%(363 / 720개월)</div>
+      <div id="c5"></div>
+    </div>
+    <div class="side">
+      <div class="box"><h3>무슨 일이 있었나</h3>
+        <ul>
+          <li>연동 <b>75%</b>, 충장로 <b>68%</b>는 B등급이 상시화. 가장 낮은 강남도 20%</li>
+          <li>QSC 85점 미만 달(2025~26): 충장로 10/20, 동성로 7/20</li>
+          <li>QSC·위생과 이익률의 상관은 <b>−0.07</b>, 즉 손익 지표에 안 잡힌다</li>
+        </ul>
+      </div>
+      <div class="box"><h3>정규직의 양면</h3>
+        <p>정규직 수와 QSC는 <b>+0.35</b>로 연결되지만, 이익률과는 −0.14다. 2026년 정규직 전환 지원금(EV-030)으로 정규직이 3.5 → 3.7명으로 늘어난 만큼 <b>품질–비용 균형</b>을 같이 봐야 한다.</p>
+      </div>
+      <div class="box"><h3>그래서</h3><p>위생·QSC를 점주 평가에 직접 넣지 않으면 개선 동기가 없다. 이익이 내려간 충장로·연동이 위생 최하위인 점도 우연으로 보기 어렵다.</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>출처: 매출데이터(실적), 사건로그(EV-011·014·017), 데이터사전. 위생검사 결과는 A/B 두 등급만 존재</span><span>7</span></div>
+</section>
+
+<!-- 7. actions -->
+<section class="slide">
+  <div class="tracker">제안</div>
+  <h1 class="title">다음 분기에는 주문 건수, 인건비율, 쿠폰 효율, 취약 두 매장, 위생 지표를 관리 대상으로 올린다</h1>
+  <div class="rule"></div>
+  <table>
+    <tr><th style="width:26%">시사점</th><th style="width:44%">제안 액션</th><th>확인할 지표</th></tr>
+    <tr><td><b>1</b> 주문 정체</td><td>성장 목표를 매출에서 <b>주문 건수·신규고객수</b>로 전환. 재방문율 53% 정체 구간을 겨냥한 프로그램 설계</td><td>월 주문수, 신규고객수, 재방문율</td></tr>
+    <tr><td><b>2</b> 인건비율</td><td>매장별 인건비율 상한 설정, 정규직 전환 지원금(EV-030)의 비용·QSC 효과 분기 점검. 치즈 단가는 2026-09 이후 계속 추적</td><td>인건비율, 식자재비율</td></tr>
+    <tr><td><b>3</b> 쿠폰·채널</td><td>쿠폰 대비 재방문·객단가 효과 측정 후 쿠폰 구조 재설계. 자사앱 비중 대신 <b>외부앱 주문의 자사앱 전환</b>을 목표로</td><td>쿠폰/매출, 외부앱 주문수</td></tr>
+    <tr><td><b>4</b> 매장 격차</td><td>충장로·연동 개선 계획을 SV와 수립. 서면(리뉴얼)·부평의 운영 방식을 확인해 이식 가능성 검토</td><td>두 매장 이익률, 정규직 수, QSC</td></tr>
+    <tr><td><b>5</b> 위생 B등급</td><td>B등급 연속 개월 수를 SV·점주 평가에 포함, 연동·충장로 우선 점검</td><td>B등급 비중, QSC 85점 미만 월 수</td></tr>
+  </table>
+  <p style="margin-top:14px;font-size:13px;color:var(--mute)">위 액션은 데이터에서 도출한 제안이며, 실행 비용과 효과는 별도 검증이 필요하다.</p>
+  <div class="footer"><span>출처: 위 분석 종합</span><span>8</span></div>
+</section>
+
+<!-- 8. appendix -->
+<section class="slide">
+  <div class="tracker">부록</div>
+  <h1 class="title">데이터 처리 방식과 해석상 한계</h1>
+  <div class="rule"></div>
+  <div style="display:flex;gap:32px">
+    <div class="box" style="flex:1"><h3>처리 방식</h3>
+      <ul>
+        <li>한 매장·월이 매출카테고리 6행으로 나뉘어 있어, 매장·월 단위 지표는 <b>6행 중복을 제거</b>한 뒤 집계 (738개 매장·월)</li>
+        <li>매출액만 카테고리 합산, 비율은 주문건수 가중 평균</li>
+        <li>구분이 <b>실적</b>인 2020-01~2026-08만 사용. 2026-09~10 <b>추정치 108행은 제외</b></li>
+        <li>사건로그는 <b>확인</b> 항목만 원인으로 쓰고, 추정·미확인은 데이터로 따로 검증</li>
+      </ul>
+    </div>
+    <div class="box" style="flex:1"><h3>한계</h3>
+      <ul>
+        <li>2026년 1~5월 값은 월 평균 환산치(소수 포함)이고, 2026년은 8개월치라 연도 비교는 같은 기간끼리만 함</li>
+        <li>손익 잔차: 매출 − 비용 6항목 − 영업이익이 467건에서 매출의 5%를 넘음. 쿠폰 등 기타 항목 때문으로 보이며 비용 구조 해석에 주의</li>
+        <li>가상 데이터라 절대 수치보다 <b>추세와 상대 비교</b>에 의미를 둠</li>
+        <li>상관계수는 매장·월 738건 기준이며 인과를 뜻하지 않음</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer"><span>출처: 안내·데이터사전·정합성점검·변경이력 시트</span><span>9</span></div>
+</section>
+
+</div>
+</div>
+<div id="nav"><button id="prev">◀ 이전</button><span id="pg">1 / 9</span><button id="next">다음 ▶</button><span>← → 키 · F 전체화면 · Ctrl+P 인쇄(PDF)</span></div>
+
+<script>
+const P='#7823DC', INK='#1E1E1E', GR='#8A8A8A', LG='#C9C9C9', DOWN='#D9502B';
+const $=id=>document.getElementById(id);
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||13}" fill="${o.fill||INK}" text-anchor="${o.anchor||'start'}" font-weight="${o.weight||400}">${s}</text>`;
+const L=(x1,y1,x2,y2,c=LG,w=1,d='')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${w}" ${d?`stroke-dasharray="${d}"`:''}/>`;
+const C=(x,y,r,f,s)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" ${s?`stroke="${s}" stroke-width="2"`:''}/>`;
+const wrap=(w,h,inner)=>`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+const poly=(pts,c,w=2.5)=>`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linejoin="round"/>`;
+
+// 1. orders (bars) + ticket (line)
+(()=>{
+  const yrs=['2020','2021','2022','2023','2024','2025'], ord=[292,343,370,377,370,366], tk=[2.40,2.42,2.53,2.65,2.85,3.00];
+  const x0=60, step=110, base=380; let s='';
+  s+=L(30,base,730,base,LG);
+  yrs.forEach((y,i)=>{
+    const cx=x0+i*step+30, h=ord[i]/400*230, top=base-h, hi=i>=2;
+    s+=`<rect x="${cx-30}" y="${top}" width="60" height="${h}" fill="${hi?'#B7B7B7':'#DADADA'}"/>`;
+    s+=T(cx,top-7,ord[i],{anchor:'middle',size:13,fill:INK});
+    s+=T(cx,base+20,y,{anchor:'middle',size:13,fill:GR});
+  });
+  const pts=tk.map((v,i)=>[x0+i*step+30,130-(v-2.4)/0.6*85]);
+  s+=poly(pts,P,3);
+  pts.forEach((p,i)=>{s+=C(p[0],p[1],5,P);s+=T(p[0],p[1]-12,tk[i].toFixed(2),{anchor:'middle',fill:P,weight:700,size:14});});
+  // bracket 2022→2025
+  const xa=x0+2*step+30, xb=x0+5*step+30;
+  s+=`<rect x="${xa-34}" y="156" width="${xb-xa+68}" height="26" fill="${'#EFE6FB'}" opacity=".0"/>`;
+  s+=T(25,28,'객단가(선, 만원)',{fill:P,weight:700});
+  s+=T(25,50,'주문 건수(막대, 천 건)',{fill:GR,weight:700});
+  s+=`<rect x="${xa-34}" y="410" width="${xb-xa+68}" height="28" fill="#EFE6FB"/>`+T((xa+xb)/2,429,'2022→2025   주문 −1.2%  ·  객단가 +18.6%',{anchor:'middle',size:14,weight:800,fill:P});
+  $('c1').innerHTML=wrap(740,442,s);
+})();
+
+// 2. cost ratios
+(()=>{
+  const lab=['2020','2021','2022','2023','2024','2025','2026*'];
+  const series=[
+    {n:'식자재비율',c:GR,w:2.5,v:[30.1,30.2,30.8,31.8,31.3,30.9,30.9]},
+    {n:'인건비율',c:P,w:4,v:[24.5,26.1,27.1,27.7,28.7,28.8,29.0],bold:true},
+    {n:'영업이익률',c:INK,w:3,v:[15.4,16.9,18.0,17.8,16.6,16.8,17.4],d:'6 4'},
+    {n:'플랫폼수수료율',c:'#B7B7B7',w:2,v:[8.6,8.0,6.9,7.0,7.1,7.0,7.0]},
+    {n:'임차료율',c:'#B7B7B7',w:2,v:[5.5,4.8,4.3,4.1,4.0,3.9,3.8]}
+  ];
+  const x0=50, step=94, yb=370, sc=300/36; let s='';
+  [0,10,20,30].forEach(g=>{s+=L(40,yb-g*sc,640,yb-g*sc,'#E6E6E6');s+=T(34,yb-g*sc+4,g+'%',{anchor:'end',size:12,fill:GR});});
+  lab.forEach((y,i)=>s+=T(x0+i*step,yb+22,y,{anchor:'middle',size:13,fill:GR}));
+  series.forEach(se=>{
+    const pts=se.v.map((v,i)=>[x0+i*step,yb-v*sc]);
+    s+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${se.c}" stroke-width="${se.w}" ${se.d?`stroke-dasharray="${se.d}"`:''}/>`;
+    if(se.bold||se.n==='영업이익률'||se.n==='식자재비율'){
+      pts.forEach((p,i)=>{ if(i===0||i===5||i===6||(se.bold&&i===2)){s+=C(p[0],p[1],4,se.c);s+=T(p[0],p[1]+(se.n==='식자재비율'?-10:(se.n==='인건비율'?19:-10)),se.v[i].toFixed(1),{anchor:'middle',size:12.5,fill:se.c===GR?'#555':se.c,weight:700});}});
+    }
+    const last=pts[6]; let dy=4; if(se.n==='식자재비율')dy=-6; if(se.n==='인건비율')dy=12; if(se.n==='플랫폼수수료율')dy=2; if(se.n==='임차료율')dy=14;
+    s+=T(last[0]+14,last[1]+dy,se.n,{size:13,weight:700,fill:se.c==='#B7B7B7'?GR:se.c});
+  });
+  $('c2').innerHTML=wrap(740,400,s);
+})();
+
+// 3a. own-app share
+(()=>{
+  const lab=['2020','2021','2022','2023','2024','2025','2026*'], v=[5.6,9.5,13.8,17.3,21.6,25.3,31.4];
+  const x0=36, step=50, yb=185, sc=135/34; let s=L(20,yb,350,yb,LG);
+  const pts=v.map((a,i)=>[x0+i*step,yb-a*sc]);
+  s+=`<polygon points="${[[x0,yb],...pts,[x0+6*step,yb]].map(p=>p.join(',')).join(' ')}" fill="#EFE6FB"/>`;
+  s+=poly(pts,P,3);
+  pts.forEach((p,i)=>{s+=C(p[0],p[1],4,P);s+=T(p[0],p[1]-10,v[i].toFixed(1),{anchor:'middle',size:12,fill:P,weight:700});s+=T(p[0],yb+18,lab[i],{anchor:'middle',size:11.5,fill:GR});});
+  $('c3a').innerHTML=wrap(360,206,s);
+})();
+// 3b. platform orders
+(()=>{
+  const lab=['2020','2021','2022','2023','2024','2025'], v=[160,172,159,161,159,157];
+  const x0=36, step=58, yb=185; let s=L(20,yb,350,yb,LG);
+  v.forEach((a,i)=>{const h=a/200*125, cx=x0+i*step; s+=`<rect x="${cx-19}" y="${yb-h}" width="38" height="${h}" fill="#B7B7B7"/>`+T(cx,yb-h-7,a,{anchor:'middle',size:12.5,weight:700,fill:'#555'})+T(cx,yb+18,lab[i],{anchor:'middle',size:11.5,fill:GR});});
+  s+=T(180,26,'연 약 16만 건 유지',{anchor:'middle',size:13,weight:800});
+  $('c3b').innerHTML=wrap(360,206,s);
+})();
+// 3c. coupon vs platform fee
+(()=>{
+  const lab=['2020','2021','2022','2023','2024','2025'], cp=[6.08,7.17,8.19,9.15,9.38,9.55], pf=[6.00,6.62,6.48,6.98,7.43,7.70];
+  const x0=70, step=105, yb=170, sc=125/11; let s=L(30,yb,730,yb,LG);
+  lab.forEach((y,i)=>{
+    const cx=x0+i*step;
+    const h1=cp[i]*sc,h2=pf[i]*sc;
+    s+=`<rect x="${cx-34}" y="${yb-h1}" width="32" height="${h1}" fill="${P}"/>`+T(cx-18,yb-h1-6,cp[i].toFixed(1),{anchor:'middle',size:12,weight:700,fill:P});
+    s+=`<rect x="${cx+2}" y="${yb-h2}" width="32" height="${h2}" fill="#B7B7B7"/>`+T(cx+18,yb-h2-6,pf[i].toFixed(1),{anchor:'middle',size:12,weight:700,fill:'#555'});
+    s+=T(cx,yb+18,y,{anchor:'middle',size:12,fill:GR});
+  });
+  s+=`<rect x="520" y="8" width="12" height="12" fill="${P}"/>`+T(538,19,'쿠폰 할인',{size:12.5,weight:700})+`<rect x="610" y="8" width="12" height="12" fill="#B7B7B7"/>`+T(628,19,'플랫폼 수수료',{size:12.5,weight:700});
+  $('c3c').innerHTML=wrap(740,192,s);
+})();
+
+// 4. dumbbell
+(()=>{
+  const d=[['부산 서면점',16.9,21.0],['인천 부평점',18.1,20.5],['대전 둔산점',17.2,18.1],['대구 동성로점',15.5,17.8],['서울 홍대점',15.7,17.4],['수원 영통점',17.0,17.2],['서울 강남점',15.7,16.4],['제주 연동점',15.8,14.2],['광주 충장로점',15.5,13.2]];
+  const x0=190, w=430, lo=11, hi=22, rh=38; let s='';
+  [12,14,16,18,20,22].forEach(g=>{const x=x0+(g-lo)/(hi-lo)*w; s+=L(x,6,x,d.length*rh+6,'#EBEBEB')+T(x,d.length*rh+26,g+'%',{anchor:'middle',size:12,fill:GR});});
+  d.forEach((r,i)=>{
+    const y=i*rh+rh/2+6, a=x0+(r[1]-lo)/(hi-lo)*w, b=x0+(r[2]-lo)/(hi-lo)*w, up=r[2]>=r[1], col=up?P:DOWN;
+    s+=T(20,y+5,r[0],{size:14,weight:(i===0||i>=7)?800:500});
+    s+=L(a,y,b,y,col,4)+C(a,y,7,'#fff',GR)+C(b,y,8,col);
+    const dif=(r[2]-r[1]); s+=T(b+(up?16:-16),y+5,r[2].toFixed(1),{anchor:up?'start':'end',size:13.5,weight:800,fill:col});
+    s+=T(715,y+5,(dif>=0?'+':'')+dif.toFixed(1)+'%p',{anchor:'end',size:12.5,weight:700,fill:col});
+  });
+  s+=C(30,d.length*rh+52,6,'#fff',GR)+T(42,d.length*rh+57,'2025년 1~8월',{size:12.5,fill:'#555'})+C(160,d.length*rh+52,6,P)+T(172,d.length*rh+57,'2026년 1~8월(상승)',{size:12.5,fill:'#555'})+C(320,d.length*rh+52,6,DOWN)+T(332,d.length*rh+57,'2026년 1~8월(하락)',{size:12.5,fill:'#555'});
+  $('c4').innerHTML=wrap(740,d.length*rh+70,s);
+})();
+
+// 5. hygiene B share bars
+(()=>{
+  const d=[['제주 연동점',75],['광주 충장로점',68],['인천 부평점',61],['대전 둔산점',59],['수원 영통점',54],['대구 동성로점',49],['부산 서면점',41],['서울 홍대점',28],['서울 강남점',20]];
+  const x0=150, w=520, rh=42; let s='';
+  d.forEach((r,i)=>{
+    const y=i*rh+8, bw=r[1]/100*w, hl=i<2;
+    s+=T(20,y+22,r[0],{size:14,weight:hl?800:500});
+    s+=`<rect x="${x0}" y="${y+4}" width="${bw}" height="26" fill="${hl?P:'#C9C9C9'}"/>`+T(x0+bw+8,y+23,r[1]+'%',{size:14,weight:800,fill:hl?P:'#555'});
+  });
+  const ax=x0+0.504*w; s+=L(ax,0,ax,d.length*rh+4,INK,1.5,'5 4')+T(ax+6,d.length*rh+22,'전체 평균 50.4%',{size:13,weight:700});
+  $('c5').innerHTML=wrap(740,d.length*rh+34,s);
+})();
+
+// navigation + scaling
+const slides=[...document.querySelectorAll('.slide')]; let cur=0;
+function show(n){cur=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>s.classList.toggle('active',i===cur));$('pg').textContent=(cur+1)+' / '+slides.length;try{location.hash=cur+1}catch(e){}}
+function fit(){const k=Math.min(innerWidth/1280,(innerHeight-44)/720);$('stage').style.transform=`translate(-50%,-50%) scale(${k})`;}
+addEventListener('resize',fit);
+addEventListener('hashchange',()=>show((parseInt(location.hash.slice(1))||1)-1));
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown',' '].includes(e.key))show(cur+1);
+  else if(['ArrowLeft','PageUp'].includes(e.key))show(cur-1);
+  else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+});
+$('prev').onclick=()=>show(cur-1); $('next').onclick=()=>show(cur+1);
+fit(); show((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
